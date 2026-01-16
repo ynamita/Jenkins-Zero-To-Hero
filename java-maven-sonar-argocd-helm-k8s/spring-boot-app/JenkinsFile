@@ -54,7 +54,7 @@ pipeline {
       }
     }
 
-    stage('Update Deployment File') {
+ stage('Update Deployment File') {
   environment {
     GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
     GIT_USER_NAME = "ynamita"
@@ -64,6 +64,7 @@ pipeline {
       usernamePassword(credentialsId: 'github-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')
     ]) {
       sh '''
+        git checkout main
         git config user.email "namitaraut876@gmail.com"
         git config user.name "ynamita"
 
@@ -71,12 +72,15 @@ pipeline {
         sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
 
         git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
-        git commit -m "Update deployment image to version ${BUILD_NUMBER}"
+
+        # Commit only if there are changes
+        git diff --cached --quiet || git commit -m "Update deployment image to version ${BUILD_NUMBER}"
 
         git push https://${GIT_USER}:${GIT_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git HEAD:main
       '''
     }
   }
 }
+
   }
 }
