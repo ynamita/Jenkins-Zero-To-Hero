@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: spring-boot-app
-        image: namita850/public-repo:1
+        image: namita850/public-repo:3
         ports:
         - containerPort: 8080
 
