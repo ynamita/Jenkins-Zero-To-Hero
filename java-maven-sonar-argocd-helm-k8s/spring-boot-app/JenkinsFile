@@ -70,7 +70,7 @@ pipeline {
                         git config user.name "ynamita"
 
                         BUILD_NUMBER=${BUILD_NUMBER}
-                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
+                        sed -i "s|\\(image: namita850/public-repo:\\).*|\\1${BUILD_NUMBER}|" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
 
                         git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
 
